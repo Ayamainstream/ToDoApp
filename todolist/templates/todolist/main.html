@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+        <meta charset="utf-8">
+        
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>To Do List</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #050406;
+            font-family: 'Nunito', sans-serif;
+            padding-top: 20px;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+
+        a,
+        p {
+            color: #c7cfd6
+        }
+
+        a {
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: auto;
+            background-color: #050406;
+        }
+
+        input {
+            outline: none;
+            border: none;
+        }
+
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            color: #fff;
+            padding: 10px;
+        }
+
+        .header-bar a {
+            padding-top: 40px;
+            color: rgb(247, 247, 247);
+            text-decoration: none;
+        }
+
+        .task-wrapper {
+            display: flex;
+            margin: 10px 0 10px 0;
+            justify-content: space-between;
+            background-color: #27292b;
+            border: hidden;
+            border-radius: 22px;
+        }
+
+        .task-wrapper a {
+            color: #b4b6b8;
+        }
+
+        .task-title {
+            display: flex;
+            text-align: left;
+            padding: 20px;
+            padding-top: 25px;
+        }
+
+        .task-title a {
+            text-decoration: none;
+            color: #ffffff;
+            margin-left: 10px;
+        }
+
+        .task-complete-icon {
+            height: 20px;
+            width: 20px;
+            background-color: #FA849E;
+            border-radius: 50%;
+        }
+
+        .task-incomplete-icon {
+            height: 20px;
+            width: 20px;
+            border: 4px solid;
+            border-color: #FA849E;
+            border-radius: 50%;
+        }
+
+        .delete-link {
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 18px;
+            line-height: 0;
+            padding: 20px 0px;
+            align-self: flex-end;
+            margin: 20px;
+        }
+
+        /*Handle Classes*/
+
+        .handle {
+            cursor: grab;
+            user-select: none;
+        }
+
+        .handle:after,
+        .handle:before {
+            content: "";
+        }
+
+        .handle:active,
+        .handle:active:before,
+        .handle:active:after {
+            cursor: grabbing;
+        }
+
+        .dropArea {
+            background-color: #222222;
+            color: black;
+        }
+
+        .selectedTask {
+            opacity: 0.3;
+        }
+
+        .icon{ 
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4Igp3aWR0aD0iNDgiIGhlaWdodD0iNDgiCnZpZXdCb3g9IjAgMCAxNzIgMTcyIgpzdHlsZT0iIGZpbGw6IzAwMDAwMDsiPjxkZWZzPjxsaW5lYXJHcmFkaWVudCB4MT0iMzUuMzI0NSIgeTE9IjM1LjMyNDUiIHgyPSIxMzYuNjc1NSIgeTI9IjEzNi42NzU1IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgaWQ9ImNvbG9yLTFfYVdaeTNqbEFGU2E5X2dyMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZjNWQzIj48L3N0b3A+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjZmE4NDllIj48L3N0b3A+PC9saW5lYXJHcmFkaWVudD48bGluZWFyR3JhZGllbnQgeDE9Ijc4LjgzMzMzIiB5MT0iODYiIHgyPSI5My4xNjY2NyIgeTI9Ijg2IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgaWQ9ImNvbG9yLTJfYVdaeTNqbEFGU2E5X2dyMiI+PHN0b3Agb2Zmc2V0PSIwLjgyNCIgc3RvcC1jb2xvcj0iIzA1MDQwNiI+PC9zdG9wPjxzdG9wIG9mZnNldD0iMC45MzEiIHN0b3AtY29sb3I9IiMwNTA0MDYiPjwvc3RvcD48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwNTA0MDYiPjwvc3RvcD48L2xpbmVhckdyYWRpZW50PjxsaW5lYXJHcmFkaWVudCB4MT0iNDYuNTgzMzMiIHkxPSI4NiIgeDI9IjEyNS40MTY2NyIgeTI9Ijg2IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgaWQ9ImNvbG9yLTNfYVdaeTNqbEFGU2E5X2dyMyI+PHN0b3Agb2Zmc2V0PSIwLjgyNCIgc3RvcC1jb2xvcj0iIzA1MDQwNiI+PC9zdG9wPjxzdG9wIG9mZnNldD0iMC45MzEiIHN0b3AtY29sb3I9IiMwNTA0MDYiPjwvc3RvcD48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwNTA0MDYiPjwvc3RvcD48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9Im5vbnplcm8iIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2UtbGluZWNhcD0iYnV0dCIgc3Ryb2tlLWxpbmVqb2luPSJtaXRlciIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiBzdHJva2UtZGFzaGFycmF5PSIiIHN0cm9rZS1kYXNob2Zmc2V0PSIwIiBmb250LWZhbWlseT0ibm9uZSIgZm9udC13ZWlnaHQ9Im5vbmUiIGZvbnQtc2l6ZT0ibm9uZSIgdGV4dC1hbmNob3I9Im5vbmUiIHN0eWxlPSJtaXgtYmxlbmQtbW9kZTogbm9ybWFsIj48cGF0aCBkPSJNMCwxNzJ2LTE3MmgxNzJ2MTcyeiIgZmlsbD0ibm9uZSI+PC9wYXRoPjxnPjxwYXRoIGQ9Ik0xNTcuNjY2NjcsODZjMCwzOS41Nzc5MiAtMzIuMDg4NzUsNzEuNjY2NjcgLTcxLjY2NjY3LDcxLjY2NjY3Yy0zOS41Nzc5MiwwIC03MS42NjY2NywtMzIuMDg4NzUgLTcxLjY2NjY3LC03MS42NjY2N2MwLC0zOS41Nzc5MiAzMi4wODg3NSwtNzEuNjY2NjcgNzEuNjY2NjcsLTcxLjY2NjY3YzM5LjU3NzkyLDAgNzEuNjY2NjcsMzIuMDg4NzUgNzEuNjY2NjcsNzEuNjY2Njd6IiBmaWxsPSJ1cmwoI2NvbG9yLTFfYVdaeTNqbEFGU2E5X2dyMSkiPjwvcGF0aD48cGF0aCBkPSJNMTIxLjgzMzMzLDc1LjI1aC0yNS4wODMzM3YtMjUuMDgzMzNjMCwtMy45NTk1OCAtMy4yMDcwOCwtNy4xNjY2NyAtNy4xNjY2NywtNy4xNjY2N2gtNy4xNjY2N2MtMy45NTk1OCwwIC03LjE2NjY3LDMuMjA3MDggLTcuMTY2NjcsNy4xNjY2N3YyNS4wODMzM2gtMjUuMDgzMzNjLTMuOTU5NTgsMCAtNy4xNjY2NywzLjIwNzA4IC03LjE2NjY3LDcuMTY2Njd2Ny4xNjY2N2MwLDMuOTU5NTggMy4yMDcwOCw3LjE2NjY3IDcuMTY2NjcsNy4xNjY2N2gyNS4wODMzM3YyNS4wODMzM2MwLDMuOTU5NTggMy4yMDcwOCw3LjE2NjY3IDcuMTY2NjcsNy4xNjY2N2g3LjE2NjY3YzMuOTU5NTgsMCA3LjE2NjY3LC0zLjIwNzA4IDcuMTY2NjcsLTcuMTY2Njd2LTI1LjA4MzMzaDI1LjA4MzMzYzMuOTU5NTgsMCA3LjE2NjY3LC0zLjIwNzA4IDcuMTY2NjcsLTcuMTY2Njd2LTcuMTY2NjdjMCwtMy45NTk1OCAtMy4yMDcwOCwtNy4xNjY2NyAtNy4xNjY2NywtNy4xNjY2N3oiIGZpbGw9IiMwNTA0MDYiIG9wYWNpdHk9IjAuMDUiPjwvcGF0aD48cGF0aCBkPSJNMTIxLjgzMzMzLDc3LjA0MTY3aC0yNi44NzV2LTI2Ljg3NWMwLC0yLjk2NyAtMi40MDgsLTUuMzc1IC01LjM3NSwtNS4zNzVoLTcuMTY2NjdjLTIuOTY3LDAgLTUuMzc1LDIuNDA4IC01LjM3NSw1LjM3NXYyNi44NzVoLTI2Ljg3NWMtMi45NjcsMCAtNS4zNzUsMi40MDggLTUuMzc1LDUuMzc1djcuMTY2NjdjMCwyLjk2NyAyLjQwOCw1LjM3NSA1LjM3NSw1LjM3NWgyNi44NzV2MjYuODc1YzAsMi45NjcgMi40MDgsNS4zNzUgNS4zNzUsNS4zNzVoNy4xNjY2N2MyLjk2NywwIDUuMzc1LC0yLjQwOCA1LjM3NSwtNS4zNzV2LTI2Ljg3NWgyNi44NzVjMi45NjcsMCA1LjM3NSwtMi40MDggNS4zNzUsLTUuMzc1di03LjE2NjY3YzAsLTIuOTY3IC0yLjQwOCwtNS4zNzUgLTUuMzc1LC01LjM3NXoiIGZpbGw9IiMwNTA0MDYiIG9wYWNpdHk9IjAuMDciPjwvcGF0aD48cGF0aCBkPSJNODIuNDE2NjcsNDYuNTgzMzNoNy4xNjY2N2MxLjk3OCwwIDMuNTgzMzMsMS42MDUzMyAzLjU4MzMzLDMuNTgzMzN2NzEuNjY2NjdjMCwxLjk3OCAtMS42MDUzMywzLjU4MzMzIC0zLjU4MzMzLDMuNTgzMzNoLTcuMTY2NjdjLTEuOTc4LDAgLTMuNTgzMzMsLTEuNjA1MzMgLTMuNTgzMzMsLTMuNTgzMzN2LTcxLjY2NjY3YzAsLTEuOTc4IDEuNjA1MzMsLTMuNTgzMzMgMy41ODMzMywtMy41ODMzM3oiIGZpbGw9InVybCgjY29sb3ItMl9hV1p5M2psQUZTYTlfZ3IyKSI+PC9wYXRoPjxwYXRoIGQ9Ik0xMjUuNDE2NjcsODIuNDE2Njd2Ny4xNjY2N2MwLDEuOTc4IC0xLjYwNTMzLDMuNTgzMzMgLTMuNTgzMzMsMy41ODMzM2gtNzEuNjY2NjdjLTEuOTc4LDAgLTMuNTgzMzMsLTEuNjA1MzMgLTMuNTgzMzMsLTMuNTgzMzN2LTcuMTY2NjdjMCwtMS45NzggMS42MDUzMywtMy41ODMzMyAzLjU4MzMzLC0zLjU4MzMzaDcxLjY2NjY3YzEuOTc4LDAgMy41ODMzMywxLjYwNTMzIDMuNTgzMzMsMy41ODMzM3oiIGZpbGw9InVybCgjY29sb3ItM19hV1p5M2psQUZTYTlfZ3IzKSI+PC9wYXRoPjwvZz48L2c+PC9zdmc+') 50% 50% no-repeat;
+        background-size: 100%; }
+
+
+        #add-link {
+            color: #c7cfd6;
+            text-decoration: none;
+            font-size: 17px;
+            padding-left: 15px;
+        }
+        
+        #add-wrapper {
+            display:inline-flex;
+            width: 97%;
+            align-items: center;
+            padding: 10px;
+            border-style: solid;
+            border-width: 2px;
+            border-radius: 22px;
+            border-color: #27292b;
+        }
+
+        #tasklist {
+            padding-top: 10px;
+        }
+
+        #complete-task {
+            width: 100%;
+            margin-left: 20px;
+        }
+
+        #count {
+            padding: 60px 0 0 10px;
+        }
+
+        @media screen and (max-width:320px) {
+            #add-wrapper {
+                padding: 10px;
+            }
+        }
+
+        input[type=text],
+        input[type=password],
+        input[type=username],
+        textarea {
+            border: 1px hidden;
+            color: #ffffff;
+            background-color: #2d2f31;
+            border-radius: 5px;
+            padding: 10px;
+            width: 90%;
+        }
+
+        .button {
+            border: 1px hidden;
+            background-color: #FA849E;
+            color: #f1f2f6;
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            margin-block: auto;
+        }
+
+        .card-body {
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        {% block content %} {% endblock content %}
+    </div>
+
+</body>
+
+
+</html>

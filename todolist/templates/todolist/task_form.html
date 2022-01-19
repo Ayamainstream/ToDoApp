@@ -1,0 +1,22 @@
+{% extends 'todolist/main.html' %}
+{% block content %}
+
+<div class="header-bar">
+    <a href="{% url 'tasks' %}">&#8592; Back</a>
+</div>
+
+
+<div class="card-body">
+    <form method="POST" action="">
+        {% csrf_token %}
+        <h3>Title</h3>
+        {{form.title}}
+        <h3>Description</h3>
+        {{form.describtion}}
+        <h3>Complete {{form.complete}}</h3>
+        <input style="margin-top:20px ; width:27%;" class="button" type="submit" value="Submit">
+    </form>
+</div>
+
+
+{% endblock content %}
